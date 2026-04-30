@@ -258,7 +258,6 @@
       }
 
       .mobile-sidebar-toggle {
-          box-shadow: 0 -2px 24px 0 rgba(24, 36, 51, 0.1);
           width: var(--toggle-size);
           height: var(--toggle-size);
           display: flex;
@@ -571,14 +570,23 @@
               border-radius: 999px;
               background: #ffffff;
               color: #151923;
-              font-size: 22px;
-              line-height: 1;
               cursor: pointer;
               user-select: none;
               z-index: 4;
               transition:
                       left var(--transition-speed) ease,
                       transform var(--transition-speed) ease;
+          }
+
+          .desktop-sidebar-toggle::before {
+              margin: 0 0 0 2px;
+              content: "";
+              width: 8px;
+              height: 8px;
+              border-left: 2.5px solid #151923;
+              border-bottom: 2.5px solid #151923;
+              transform: rotate(45deg);
+              transform-origin: center;
           }
 
           .sidebar {
@@ -1277,8 +1285,7 @@
         createElement('label', {
           className: 'desktop-sidebar-toggle',
           htmlFor: 'sidebar_state',
-          'aria-label': 'Toggle sidebar',
-          textContent: '‹'
+          'aria-label': 'Toggle sidebar'
         }),
 
         createElement('main', {
