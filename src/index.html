@@ -15,17 +15,9 @@
 
           --app-min-width: 320px;
           --header-height: 80px;
-          --page-bg: #f4f6fb;
-          --header-bg: #f9fafb;
-          --header-color: #374151;
-          --card-bg: #ffffff;
-          --card-border: #dfe3ec;
           --card-radius: 14px;
-          --content-bg: #ffffff;
           --content-padding: 16px;
           --content-vertical-padding: 32px;
-          --border-color: #dfe3ec;
-          --header-bottom-border-color: #e5e7eb;
 
           --sidebar-expanded-width: 100%;
           --sidebar-collapsed-width: 0px;
@@ -36,10 +28,87 @@
           --toggle-size: 42px;
           --transition-speed: 220ms;
 
-          --sidebar-bg: #202637;
-          --sidebar-color: #ffffff;
-
           --text-error: #c0392b;
+          --chart-text-color: #374151;
+          --chart-grid-color: #eef2f7;
+          --chart-border-color: #dfe3ec;
+          --chart-up-color: #16a34a;
+          --chart-down-color: #dc2626;
+      }
+
+
+      :root,
+      :root[data-theme="light"] {
+          --page-bg: #f4f6fb;
+          --header-bg: #f9fafb;
+          --header-color: #374151;
+          --header-bottom-border-color: #e5e7eb;
+          --card-bg: #ffffff;
+          --card-border: #dfe3ec;
+          --content-bg: #ffffff;
+          --border-color: #dfe3ec;
+          --text-primary: #151923;
+          --text-secondary: #667085;
+          --text-muted: #344054;
+          --input-bg: #ffffff;
+          --input-border: #dfe3ec;
+          --input-focus: #667085;
+          --input-focus-shadow: rgba(102, 112, 133, 0.14);
+          --button-primary-bg: #151923;
+          --button-primary-hover-bg: #252c3a;
+          --button-primary-text: #ffffff;
+          --surface-muted: #f8fafc;
+          --toggle-bg: #ffffff;
+          --toggle-border: #dfe3ec;
+          --toggle-icon: #151923;
+          --sidebar-bg: #eef2f8;
+          --sidebar-border: #dde4ef;
+          --sidebar-color: #334155;
+          --sidebar-heading-color: #111827;
+          --sidebar-menu-color: #5b667a;
+          --sidebar-menu-hover-bg: #e3eaf4;
+          --sidebar-menu-hover-color: #1f2937;
+          --sidebar-menu-active-bg: #d4ddeb;
+          --sidebar-menu-active-color: #111827;
+          --sidebar-divider: #d6deea;
+          --chart-bg: #ffffff;
+      }
+
+
+      :root[data-theme="dark"] {
+          --page-bg: #0f1723;
+          --header-bg: #121b2b;
+          --header-color: #e5e7eb;
+          --header-bottom-border-color: #253047;
+          --card-bg: #162132;
+          --card-border: #273246;
+          --content-bg: #0f1723;
+          --border-color: #273246;
+          --text-primary: #f3f4f6;
+          --text-secondary: #94a3b8;
+          --text-muted: #cbd5e1;
+          --input-bg: #101827;
+          --input-border: #334155;
+          --input-focus: #64748b;
+          --input-focus-shadow: rgba(100, 116, 139, 0.18);
+          --button-primary-bg: #e2e8f0;
+          --button-primary-hover-bg: #cbd5e1;
+          --button-primary-text: #0f1723;
+          --surface-muted: #1a2639;
+          --toggle-bg: #162132;
+          --toggle-border: #334155;
+          --toggle-icon: #f3f4f6;
+          --sidebar-bg: #202637;
+          --sidebar-border: #2a3144;
+          --sidebar-color: #ffffff;
+          --sidebar-heading-color: #ffffff;
+          --sidebar-menu-color: #c8d0e0;
+          --sidebar-menu-hover-bg: rgba(255, 255, 255, 0.08);
+          --sidebar-menu-hover-color: #ffffff;
+          --sidebar-menu-active-bg: rgba(255, 255, 255, 0.14);
+          --sidebar-menu-active-color: #ffffff;
+          --sidebar-divider: rgba(200, 208, 224, 0.18);
+          --chart-bg: #bcc8dd;
       }
 
       * {
@@ -54,6 +123,7 @@
           margin: 0;
           font-family: Arial, sans-serif;
           background: var(--page-bg);
+          color: var(--text-primary);
       }
 
       body {
@@ -172,7 +242,7 @@
 
       .login-form-title {
           margin: 0 0 4px;
-          color: #151923;
+          color: var(--text-primary);
           font-size: 22px;
           font-weight: 700;
           text-align: center;
@@ -180,7 +250,7 @@
 
       .login-form-subtitle {
           margin: 0 0 8px;
-          color: #667085;
+          color: var(--text-secondary);
           font-size: 14px;
           line-height: 1.4;
           text-align: center;
@@ -193,7 +263,7 @@
       }
 
       .login-label {
-          color: #344054;
+          color: var(--text-muted);
           font-size: 14px;
           font-weight: 600;
       }
@@ -202,10 +272,10 @@
           width: 100%;
           height: 44px;
           padding: 0 12px;
-          border: 1px solid var(--card-border);
+          border: 1px solid var(--input-border);
           border-radius: 10px;
-          background: #ffffff;
-          color: #151923;
+          background: var(--input-bg);
+          color: var(--text-primary);
           font-size: 15px;
           outline: none;
           transition:
@@ -214,8 +284,12 @@
       }
 
       .login-input:focus {
-          border-color: #667085;
-          box-shadow: 0 0 0 3px rgba(102, 112, 133, 0.14);
+          border-color: var(--input-focus);
+          box-shadow: 0 0 0 3px var(--input-focus-shadow);
+      }
+
+      .login-input::placeholder {
+          color: var(--text-secondary);
       }
 
       .login-submit {
@@ -224,8 +298,8 @@
           margin-top: 4px;
           border: 0;
           border-radius: 10px;
-          background: #151923;
-          color: #ffffff;
+          background: var(--button-primary-bg);
+          color: var(--button-primary-text);
           font-size: 15px;
           font-weight: 700;
           cursor: pointer;
@@ -235,7 +309,7 @@
       }
 
       .login-submit:hover {
-          background: #252c3a;
+          background: var(--button-primary-hover-bg);
       }
 
       .login-submit:active {
@@ -266,12 +340,13 @@
           align-items: center;
           justify-content: center;
           border-radius: 999px;
-          background: #ffffff;
-          color: #151923;
+          background: var(--toggle-bg);
+          color: var(--toggle-icon);
           font-size: 22px;
           line-height: 1;
           cursor: pointer;
           user-select: none;
+          border: 1px solid var(--toggle-border);
       }
 
       .desktop-sidebar-toggle {
@@ -293,6 +368,7 @@
           overflow: hidden;
           background: var(--sidebar-bg);
           color: var(--sidebar-color);
+          border-right: 1px solid var(--sidebar-border);
           transition:
                   width var(--transition-speed) ease,
                   flex-basis var(--transition-speed) ease;
@@ -312,6 +388,7 @@
 
       .sidebar-heading {
           margin: 0 0 16px;
+          color: var(--sidebar-heading-color);
           font-size: 16px;
           font-weight: 700;
           transition:
@@ -326,6 +403,16 @@
           gap: 8px;
       }
 
+      .sidebar-menu-divider {
+          width: 100%;
+          height: 1px;
+          margin: 8px 0 4px;
+          background: var(--sidebar-divider);
+          transition:
+                  width var(--transition-speed) ease,
+                  opacity var(--transition-speed) ease;
+      }
+
       .sidebar-menu-button {
           width: 100%;
           min-width: 188px;
@@ -337,7 +424,7 @@
           border: 0;
           border-radius: 12px;
           background: transparent;
-          color: #c8d0e0;
+          color: var(--sidebar-menu-color);
           font-size: 15px;
           font-weight: 600;
           text-align: left;
@@ -353,13 +440,13 @@
       }
 
       .sidebar-menu-button:hover {
-          background: rgba(255, 255, 255, 0.08);
-          color: #ffffff;
+          background: var(--sidebar-menu-hover-bg);
+          color: var(--sidebar-menu-hover-color);
       }
 
       .sidebar-menu-button-active {
-          background: rgba(255, 255, 255, 0.14);
-          color: #ffffff;
+          background: var(--sidebar-menu-active-bg);
+          color: var(--sidebar-menu-active-color);
       }
 
       .sidebar-menu-icon {
@@ -374,6 +461,16 @@
           transition:
                   width var(--transition-speed) ease,
                   opacity var(--transition-speed) ease;
+      }
+
+      .sidebar-theme-button {
+          border: 1px solid transparent;
+      }
+
+      .sidebar-theme-button:hover,
+      .sidebar-theme-button:focus-visible {
+          border-color: var(--sidebar-divider);
+          outline: none;
       }
 
       .content {
@@ -400,18 +497,18 @@
           padding: 16px;
           border: 1px solid var(--border-color);
           border-radius: 14px;
-          background: #ffffff;
+          background: var(--card-bg);
       }
 
       .content-title {
           margin: 0 0 16px;
-          color: #151923;
+          color: var(--text-primary);
           font-size: 20px;
       }
 
       .content-text {
           margin: 0;
-          color: #667085;
+          color: var(--text-secondary);
           line-height: 1.5;
       }
 
@@ -428,16 +525,16 @@
           padding: 12px;
           border: 1px solid var(--border-color);
           border-radius: 10px;
-          background: #f8fafc;
+          background: var(--surface-muted);
       }
 
       .info-label {
-          color: #667085;
+          color: var(--text-secondary);
           font-size: 13px;
       }
 
       .info-value {
-          color: #151923;
+          color: var(--text-primary);
           font-size: 15px;
           font-weight: 700;
       }
@@ -455,24 +552,24 @@
           padding: 14px;
           border: 1px solid var(--border-color);
           border-radius: 12px;
-          background: #f8fafc;
+          background: var(--surface-muted);
       }
 
       .account-name {
           margin: 0 0 4px;
-          color: #151923;
+          color: var(--text-primary);
           font-size: 15px;
           font-weight: 700;
       }
 
       .account-meta {
           margin: 0;
-          color: #667085;
+          color: var(--text-secondary);
           font-size: 13px;
       }
 
       .account-balance {
-          color: #151923;
+          color: var(--text-primary);
           font-size: 15px;
           font-weight: 700;
           white-space: nowrap;
@@ -496,7 +593,7 @@
       }
 
       .terminal-label {
-          color: #667085;
+          color: var(--text-secondary);
           font-size: 13px;
           font-weight: 600;
       }
@@ -505,10 +602,10 @@
           width: 100%;
           height: 42px;
           padding: 0 12px;
-          border: 1px solid var(--border-color);
+          border: 1px solid var(--input-border);
           border-radius: 10px;
-          background: #ffffff;
-          color: #151923;
+          background: var(--input-bg);
+          color: var(--text-primary);
           font-size: 14px;
           outline: none;
       }
@@ -520,16 +617,16 @@
           padding: 10px 12px;
           border: 1px solid var(--border-color);
           border-radius: 10px;
-          background: #f8fafc;
+          background: var(--surface-muted);
       }
 
       .terminal-price-label {
-          color: #667085;
+          color: var(--text-secondary);
           font-size: 12px;
       }
 
       .terminal-price-value {
-          color: #151923;
+          color: var(--text-primary);
           font-size: 18px;
           font-weight: 700;
       }
@@ -541,12 +638,12 @@
           border: 1px solid var(--border-color);
           border-radius: 14px;
           overflow: hidden;
-          background: #ffffff;
+          background: var(--chart-bg);
       }
 
       .terminal-status {
           margin: 10px 0 0;
-          color: #667085;
+          color: var(--text-secondary);
           font-size: 13px;
       }
 
@@ -641,10 +738,10 @@
               display: flex;
               align-items: center;
               justify-content: center;
-              border: 1px solid var(--border-color);
+              border: 1px solid var(--toggle-border);
               border-radius: 999px;
-              background: #ffffff;
-              color: #151923;
+              background: var(--toggle-bg);
+              color: var(--toggle-icon);
               cursor: pointer;
               user-select: none;
               z-index: 4;
@@ -658,8 +755,8 @@
               content: "";
               width: 8px;
               height: 8px;
-              border-left: 2.5px solid #151923;
-              border-bottom: 2.5px solid #151923;
+              border-left: 2.5px solid var(--toggle-icon);
+              border-bottom: 2.5px solid var(--toggle-icon);
               transform: rotate(45deg);
               transform-origin: center;
           }
@@ -713,6 +810,10 @@
           .sidebar-state:not(:checked) ~ .app-shell .sidebar-menu {
               align-items: center;
               gap: 16px;
+          }
+
+          .sidebar-state:not(:checked) ~ .app-shell .sidebar-menu-divider {
+              width: 32px;
           }
 
           .sidebar-state:not(:checked) ~ .app-shell .sidebar-menu-button {
@@ -774,7 +875,8 @@
       sidebarExpanded: false,
       isAuthenticated: false,
       clientName: null,
-      terminalInstrument: 'EURUSD'
+      terminalInstrument: 'EURUSD',
+      theme: 'light'
     };
 
     const parseJson = (rawValue) => {
@@ -831,6 +933,11 @@
     profile: 'profile',
     accounts: 'accounts',
     terminal: 'terminal'
+  };
+
+  const themes = {
+    light: 'light',
+    dark: 'dark'
   };
 
   const protectedRoutes = [
@@ -892,6 +999,96 @@
 
   const isProtectedRoute = (route) => {
     return protectedRoutes.includes(route);
+  };
+
+  const normalizeTheme = (theme) => {
+    return Object.values(themes).includes(theme)
+      ? theme
+      : themes.light;
+  };
+
+  const getCurrentTheme = () => {
+    return normalizeTheme(appStorage.getState().theme);
+  };
+
+  const applyTheme = (theme) => {
+    document.documentElement.dataset.theme = normalizeTheme(theme);
+  };
+
+  const toggleTheme = () => {
+    const nextTheme = getCurrentTheme() === themes.dark
+      ? themes.light
+      : themes.dark;
+
+    appStorage.setState({
+      theme: nextTheme
+    });
+
+    applyTheme(nextTheme);
+    updateThemeDependentUi();
+    updateTerminalChartTheme();
+  };
+
+  const getCssVariableValue = (name) => {
+    return getComputedStyle(document.documentElement)
+      .getPropertyValue(name)
+      .trim();
+  };
+
+  const getCurrentLogo = () => {
+    return getCurrentTheme() === themes.dark
+      ? 'images/oneroyal-logo-dark.svg'
+      : 'images/oneroyal-logo.svg';
+  };
+
+  const getThemeToggleConfig = () => {
+    const isDarkTheme = getCurrentTheme() === themes.dark;
+
+    return {
+      icon: isDarkTheme
+        ? 'images/sun.svg'
+        : 'images/moon.svg',
+      label: isDarkTheme
+        ? 'Light Theme'
+        : 'Dark Theme',
+      ariaLabel: isDarkTheme
+        ? 'Switch to light theme'
+        : 'Switch to dark theme'
+    };
+  };
+
+  const updateThemeDependentUi = () => {
+    document.querySelectorAll('.app-logo').forEach((logoElement) => {
+      logoElement.setAttribute('src', getCurrentLogo());
+    });
+
+    const themeButton = document.getElementById('theme_toggle_button');
+    const themeIcon = document.getElementById('theme_toggle_icon');
+    const themeLabel = document.getElementById('theme_toggle_label');
+
+    if (!themeButton || !themeIcon || !themeLabel) {
+      return;
+    }
+
+    const themeConfig = getThemeToggleConfig();
+
+    themeButton.setAttribute('aria-label', themeConfig.ariaLabel);
+    themeIcon.setAttribute('src', themeConfig.icon);
+    themeLabel.textContent = themeConfig.label;
+  };
+
+  const updateTerminalChartTheme = () => {
+    if (!terminalRuntime || !terminalRuntime.chart) {
+      return;
+    }
+
+    terminalRuntime.chart.applyOptions({
+      layout: {
+        background: {
+          color: getCssVariableValue('--chart-bg')
+        }
+      }
+    });
   };
 
   const loginCredentials = {
@@ -1039,7 +1236,7 @@
     }, [
       createElement('img', {
         className: 'app-logo',
-        src: 'images/oneroyal-logo.svg',
+        src: getCurrentLogo(),
         alt: 'Client Portal logo'
       }),
 
@@ -1197,33 +1394,65 @@
   };
 
   const createSidebarMenu = (activeRoute) => {
+    const themeConfig = getThemeToggleConfig();
+
     return createElement('nav', {
       className: 'sidebar-menu',
       'aria-label': 'Main menu'
-    }, menuItems.map((item) => {
-      const isActive = item.route === activeRoute;
+    }, [
+      ...menuItems.map((item) => {
+        const isActive = item.route === activeRoute;
 
-      return createElement('button', {
-        className: isActive
-          ? 'sidebar-menu-button sidebar-menu-button-active'
-          : 'sidebar-menu-button',
+        return createElement('button', {
+          className: isActive
+            ? 'sidebar-menu-button sidebar-menu-button-active'
+            : 'sidebar-menu-button',
+          type: 'button',
+          onClick: () => {
+            navigateTo(item.route);
+          }
+        }, [
+          createElement('img', {
+            className: 'sidebar-menu-icon',
+            src: item.icon,
+            alt: ''
+          }),
+
+          createElement('span', {
+            className: 'sidebar-menu-label',
+            textContent: item.label
+          })
+        ]);
+      }),
+
+      createElement('div', {
+        className: 'sidebar-menu-divider',
+        'aria-hidden': 'true'
+      }),
+
+      createElement('button', {
+        id: 'theme_toggle_button',
+        className: 'sidebar-menu-button sidebar-theme-button',
         type: 'button',
+        'aria-label': themeConfig.ariaLabel,
         onClick: () => {
-          navigateTo(item.route);
+          toggleTheme();
         }
       }, [
         createElement('img', {
+          id: 'theme_toggle_icon',
           className: 'sidebar-menu-icon',
-          src: item.icon,
+          src: themeConfig.icon,
           alt: ''
         }),
 
         createElement('span', {
+          id: 'theme_toggle_label',
           className: 'sidebar-menu-label',
-          textContent: item.label
+          textContent: themeConfig.label
         })
-      ]);
-    }));
+      ])
+    ]);
   };
 
   const createContentCard = (title, children) => {
@@ -1512,6 +1741,12 @@
     try {
       const lightweightCharts = await loadTradingViewLibrary();
       const activeInstrument = getTerminalInstrument(appStorage.getState().terminalInstrument);
+      const chartBackgroundColor = getCssVariableValue('--chart-bg');
+      const chartTextColor = getCssVariableValue('--chart-text-color');
+      const chartGridColor = getCssVariableValue('--chart-grid-color');
+      const chartBorderColor = getCssVariableValue('--chart-border-color');
+      const chartUpColor = getCssVariableValue('--chart-up-color');
+      const chartDownColor = getCssVariableValue('--chart-down-color');
 
       if (!document.getElementById('terminal_chart')) {
         return;
@@ -1522,33 +1757,33 @@
         height: chartContainer.clientHeight,
         layout: {
           background: {
-            color: '#ffffff'
+            color: chartBackgroundColor
           },
-          textColor: '#374151'
+          textColor: chartTextColor
         },
         grid: {
           vertLines: {
-            color: '#eef2f7'
+            color: chartGridColor
           },
           horzLines: {
-            color: '#eef2f7'
+            color: chartGridColor
           }
         },
         rightPriceScale: {
-          borderColor: '#dfe3ec'
+          borderColor: chartBorderColor
         },
         timeScale: {
-          borderColor: '#dfe3ec'
+          borderColor: chartBorderColor
         }
       });
 
       const candleSeries = chart.addCandlestickSeries({
-        upColor: '#16a34a',
-        downColor: '#dc2626',
-        borderUpColor: '#16a34a',
-        borderDownColor: '#dc2626',
-        wickUpColor: '#16a34a',
-        wickDownColor: '#dc2626'
+        upColor: chartUpColor,
+        downColor: chartDownColor,
+        borderUpColor: chartUpColor,
+        borderDownColor: chartDownColor,
+        wickUpColor: chartUpColor,
+        wickDownColor: chartDownColor
       });
 
       const candles = generateDailyCandles(activeInstrument);
@@ -1744,6 +1979,8 @@
     const route = getCurrentRoute();
     const appState = appStorage.getState();
 
+    applyTheme(appState.theme);
+
     if (!appState.isAuthenticated) {
       destroyTerminalChart();
 
@@ -1794,6 +2031,8 @@
   };
 
   window.addEventListener('hashchange', renderApp);
+
+  applyTheme(appStorage.getState().theme);
 
   const initialRoute = getCurrentRoute();
 
