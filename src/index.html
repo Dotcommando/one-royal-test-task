@@ -21,6 +21,19 @@
           --card-bg: #ffffff;
           --card-border: #dfe3ec;
           --card-radius: 14px;
+          --content-bg: #ffffff;
+          --border-color: #dfe3ec;
+
+          --sidebar-expanded-width: 100%;
+          --sidebar-collapsed-width: 0px;
+          --sidebar-desktop-expanded-width: min(25vw, 220px);
+          --sidebar-desktop-collapsed-width: 80px;
+
+          --toggle-size: 42px;
+          --transition-speed: 220ms;
+
+          --sidebar-bg: #202637;
+          --sidebar-color: #ffffff;
       }
 
       * {
@@ -94,6 +107,84 @@
           text-align: center;
       }
 
+      .sidebar-state {
+          position: absolute;
+          width: 1px;
+          height: 1px;
+          opacity: 0;
+          pointer-events: none;
+      }
+
+      .mobile-sidebar-toggle {
+          width: var(--toggle-size);
+          height: var(--toggle-size);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 999px;
+          background: #ffffff;
+          color: #151923;
+          font-size: 22px;
+          line-height: 1;
+          cursor: pointer;
+          user-select: none;
+      }
+
+      .desktop-sidebar-toggle {
+          display: none;
+      }
+
+      .app-shell {
+          position: relative;
+          min-height: calc(100vh - var(--header-height));
+          flex: 1 1 auto;
+          display: flex;
+          overflow: hidden;
+      }
+
+      .sidebar {
+          width: var(--sidebar-collapsed-width);
+          flex: 0 0 var(--sidebar-collapsed-width);
+          min-height: calc(100vh - var(--header-height));
+          overflow: hidden;
+          background: var(--sidebar-bg);
+          color: var(--sidebar-color);
+          transition:
+                  width var(--transition-speed) ease,
+                  flex-basis var(--transition-speed) ease;
+      }
+
+      .sidebar-inner {
+          width: 100vw;
+          max-width: 320px;
+          min-height: 100%;
+          padding: 16px;
+          opacity: 0;
+          transition: opacity var(--transition-speed) ease;
+      }
+
+      .sidebar-heading {
+          margin: 0 0 16px;
+          font-size: 16px;
+          font-weight: 700;
+      }
+
+      .sidebar-placeholder {
+          margin: 0;
+          color: #c8d0e0;
+          font-size: 14px;
+          line-height: 1.5;
+      }
+
+      .sidebar-state:checked ~ .app-shell .sidebar {
+          width: var(--sidebar-expanded-width);
+          flex-basis: var(--sidebar-expanded-width);
+      }
+
+      .sidebar-state:checked ~ .app-shell .sidebar-inner {
+          opacity: 1;
+      }
+
       @media (min-width: 600px) {
           :root {
               --header-height: 68px;
@@ -106,11 +197,65 @@
           .app-main {
               padding: 24px;
           }
+
+          .content {
+              padding: 24px;
+          }
       }
 
       @media (min-width: 1024px) {
           .login-card {
               max-width: 420px;
+          }
+
+          .mobile-sidebar-toggle {
+              display: none;
+          }
+
+          .desktop-sidebar-toggle {
+              position: absolute;
+              top: 24px;
+              left: calc(var(--sidebar-desktop-collapsed-width) - (var(--toggle-size) / 2));
+              width: var(--toggle-size);
+              height: var(--toggle-size);
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              border: 1px solid var(--border-color);
+              border-radius: 999px;
+              background: #ffffff;
+              color: #151923;
+              font-size: 22px;
+              line-height: 1;
+              cursor: pointer;
+              user-select: none;
+              z-index: 4;
+              transition: left var(--transition-speed) ease;
+          }
+
+          .sidebar {
+              width: var(--sidebar-desktop-collapsed-width);
+              flex-basis: var(--sidebar-desktop-collapsed-width);
+          }
+
+          .sidebar-inner {
+              width: var(--sidebar-desktop-expanded-width);
+              max-width: var(--sidebar-desktop-expanded-width);
+              opacity: 1;
+          }
+
+          .content {
+              width: auto;
+              height: calc(100vh - var(--header-height));
+          }
+
+          .sidebar-state:checked ~ .app-shell .sidebar {
+              width: var(--sidebar-desktop-expanded-width);
+              flex-basis: var(--sidebar-desktop-expanded-width);
+          }
+
+          .sidebar-state:checked ~ .app-shell .desktop-sidebar-toggle {
+              left: calc(var(--sidebar-desktop-expanded-width) - (var(--toggle-size) / 2));
           }
       }
 
@@ -219,7 +364,82 @@
     ];
   }
 
-  rootElement.replaceChildren(...renderLoginPage());
+  const createSidebarLayout = () => {
+    return [
+      createElement('input', {
+        className: 'sidebar-state',
+        id: 'sidebar_state',
+        type: 'checkbox'
+      }),
+
+      createElement('header', {
+        className: 'app-header'
+      }, [
+        createElement('h1', {
+          className: 'app-title',
+          textContent: 'Client Portal'
+        }),
+
+        createElement('label', {
+          className: 'mobile-sidebar-toggle',
+          htmlFor: 'sidebar_state',
+          'aria-label': 'Toggle sidebar',
+          textContent: '☰'
+        })
+      ]),
+
+      createElement('div', {
+        className: 'app-shell'
+      }, [
+        createElement('aside', {
+          className: 'sidebar'
+        }, [
+          createElement('div', {
+            className: 'sidebar-inner'
+          }, [
+            createElement('h2', {
+              className: 'sidebar-heading',
+              textContent: 'Sidebar'
+            }),
+
+            createElement('p', {
+              className: 'sidebar-placeholder',
+              textContent: 'kjhfgk ufkhgf kgfkfgk gfkghfkhgf ugfkfg kgfkgf fghfkhg  kfghgf kfgkhgf'
+            })
+          ])
+        ]),
+
+        createElement('label', {
+          className: 'desktop-sidebar-toggle',
+          htmlFor: 'sidebar_state',
+          'aria-label': 'Toggle sidebar',
+          textContent: '‹'
+        }),
+
+        createElement('main', {
+          className: 'content'
+        }, [
+          createElement('section', {
+            className: 'content-card'
+          }, [
+            createElement('h2', {
+              className: 'content-title',
+              textContent: 'Content area'
+            }),
+
+            createElement('p', {
+              className: 'content-text',
+              textContent: 'sfgs fdgasfg sf dg sdf gd sfg sdf gs dfg sdf gsd fgsdfg sdf gs'
+            })
+          ])
+        ])
+      ])
+    ]
+  }
+
+  rootElement.replaceChildren(...createSidebarLayout());
+
+  // rootElement.replaceChildren(...renderLoginPage());
 </script>
 </body>
 </html>
