@@ -22,6 +22,8 @@
           --card-border: #dfe3ec;
           --card-radius: 14px;
           --content-bg: #ffffff;
+          --content-padding: 16px;
+          --content-vertical-padding: 32px;
           --border-color: #dfe3ec;
           --header-bottom-border-color: #e5e7eb;
 
@@ -374,30 +376,27 @@
                   opacity var(--transition-speed) ease;
       }
 
-      .sidebar-placeholder {
-          margin: 0;
-          color: #c8d0e0;
-          font-size: 14px;
-          line-height: 1.5;
-      }
-
       .content {
           min-width: 0;
           min-height: calc(100vh - var(--header-height));
           flex: 1 1 auto;
-          padding: 16px;
+          padding: var(--content-padding);
           overflow: auto;
           background: var(--content-bg);
       }
 
       .page-grid {
+          width: 100%;
           display: flex;
           flex-direction: column;
           gap: 16px;
       }
 
       .content-card {
+          width: 100%;
+          max-width: 1400px;
           min-height: 240px;
+          margin: 0 auto;
           padding: 16px;
           border: 1px solid var(--border-color);
           border-radius: 14px;
@@ -479,16 +478,76 @@
           white-space: nowrap;
       }
 
-      .terminal-placeholder {
-          min-height: 360px;
+      .terminal-card {
+          min-height: calc(100vh - var(--header-height) - var(--content-vertical-padding));
+      }
+
+      .terminal-toolbar {
           display: flex;
-          align-items: center;
-          justify-content: center;
-          border: 1px dashed #98a2b3;
-          border-radius: 12px;
-          background: #f8fafc;
+          flex-direction: column;
+          gap: 12px;
+          margin-bottom: 16px;
+      }
+
+      .terminal-control {
+          display: flex;
+          flex-direction: column;
+          gap: 6px;
+      }
+
+      .terminal-label {
           color: #667085;
-          text-align: center;
+          font-size: 13px;
+          font-weight: 600;
+      }
+
+      .terminal-select {
+          width: 100%;
+          height: 42px;
+          padding: 0 12px;
+          border: 1px solid var(--border-color);
+          border-radius: 10px;
+          background: #ffffff;
+          color: #151923;
+          font-size: 14px;
+          outline: none;
+      }
+
+      .terminal-price {
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
+          padding: 10px 12px;
+          border: 1px solid var(--border-color);
+          border-radius: 10px;
+          background: #f8fafc;
+      }
+
+      .terminal-price-label {
+          color: #667085;
+          font-size: 12px;
+      }
+
+      .terminal-price-value {
+          color: #151923;
+          font-size: 18px;
+          font-weight: 700;
+      }
+
+      .terminal-chart {
+          width: 100%;
+          height: 420px;
+          min-height: 320px;
+          border: 1px solid var(--border-color);
+          border-radius: 14px;
+          overflow: hidden;
+          background: #ffffff;
+      }
+
+      .terminal-status {
+          margin: 10px 0 0;
+          color: #667085;
+          font-size: 13px;
       }
 
       .sidebar-state:checked ~ .app-shell .sidebar {
@@ -503,6 +562,8 @@
       @media (min-width: 600px) {
           :root {
               --header-height: 68px;
+              --content-padding: 24px;
+              --content-vertical-padding: 48px;
           }
 
           .app-header {
@@ -543,8 +604,22 @@
               padding: 24px;
           }
 
-          .content {
+          .content-card {
               padding: 24px;
+          }
+
+          .terminal-toolbar {
+              flex-direction: row;
+              align-items: flex-end;
+              justify-content: space-between;
+          }
+
+          .terminal-control {
+              width: 220px;
+          }
+
+          .terminal-price {
+              min-width: 180px;
           }
       }
 
@@ -605,6 +680,10 @@
               height: calc(100vh - var(--header-height));
           }
 
+          .terminal-chart {
+              height: 520px;
+          }
+
           .sidebar-state:checked ~ .app-shell .sidebar {
               width: var(--sidebar-desktop-expanded-width);
               flex-basis: var(--sidebar-desktop-expanded-width);
@@ -655,11 +734,16 @@
       }
 
       @media (min-width: 1440px) {
+          :root {
+              --content-padding: 32px;
+              --content-vertical-padding: 64px;
+          }
+
           .login-card {
               max-width: 460px;
           }
 
-          .content {
+          .content-card {
               padding: 32px;
           }
       }
@@ -689,7 +773,8 @@
       route: 'login',
       sidebarExpanded: false,
       isAuthenticated: false,
-      clientName: null
+      clientName: null,
+      terminalInstrument: 'EURUSD'
     };
 
     const parseJson = (rawValue) => {
@@ -772,6 +857,39 @@
     }
   ];
 
+  const tradingViewScriptSources = [
+    'https://cdn.jsdelivr.net/npm/lightweight-charts@4.1.1/dist/lightweight-charts.standalone.production.js',
+    'https://unpkg.com/lightweight-charts@4.1.1/dist/lightweight-charts.standalone.production.js',
+    'scripts/lightweight-charts.standalone.production.js'
+  ];
+
+  const terminalInstruments = [
+    {
+      symbol: 'EURUSD',
+      label: 'EUR/USD',
+      basePrice: 1.0825,
+      decimals: 5,
+      step: 0.0012
+    },
+    {
+      symbol: 'GBPUSD',
+      label: 'GBP/USD',
+      basePrice: 1.265,
+      decimals: 5,
+      step: 0.0015
+    },
+    {
+      symbol: 'XAUUSD',
+      label: 'Gold / USD',
+      basePrice: 2335,
+      decimals: 2,
+      step: 8
+    }
+  ];
+
+  let tradingViewScriptPromise = null;
+  let terminalRuntime = null;
+
   const isProtectedRoute = (route) => {
     return protectedRoutes.includes(route);
   };
@@ -798,6 +916,8 @@
   };
 
   const logoutUser = () => {
+    destroyTerminalChart();
+
     appStorage.setState({
       route: routes.login,
       isAuthenticated: false,
@@ -887,6 +1007,11 @@
 
       if (key === 'disabled') {
         element.disabled = Boolean(value);
+        return;
+      }
+
+      if (key === 'selected') {
+        element.selected = Boolean(value);
         return;
       }
 
@@ -1217,17 +1342,331 @@
     ]);
   };
 
+  const loadScriptOnce = (src, id) => {
+    return new Promise((resolve, reject) => {
+      const existingScript = document.getElementById(id);
+
+      if (existingScript && existingScript.dataset.loaded === 'true') {
+        resolve(existingScript);
+        return;
+      }
+
+      if (existingScript) {
+        existingScript.addEventListener('load', () => {
+          resolve(existingScript);
+        }, { once: true });
+
+        existingScript.addEventListener('error', () => {
+          reject(new Error(`Script loading failed: ${src}`));
+        }, { once: true });
+
+        return;
+      }
+
+      const script = document.createElement('script');
+
+      script.id = id;
+      script.src = src;
+      script.async = true;
+
+      script.addEventListener('load', () => {
+        script.dataset.loaded = 'true';
+        resolve(script);
+      }, { once: true });
+
+      script.addEventListener('error', () => {
+        script.remove();
+        reject(new Error(`Script loading failed: ${src}`));
+      }, { once: true });
+
+      document.body.append(script);
+    });
+  };
+
+  const loadTradingViewLibrary = async () => {
+    if (window.LightweightCharts) {
+      return window.LightweightCharts;
+    }
+
+    if (tradingViewScriptPromise) {
+      return tradingViewScriptPromise;
+    }
+
+    tradingViewScriptPromise = (async () => {
+      let lastError = null;
+
+      for (const [index, src] of tradingViewScriptSources.entries()) {
+        try {
+          await loadScriptOnce(src, `tradingview_lightweight_charts_script_${index}`);
+
+          if (window.LightweightCharts) {
+            return window.LightweightCharts;
+          }
+
+          lastError = new Error(`LightweightCharts global object was not found after loading: ${src}`);
+        } catch (error) {
+          lastError = error;
+        }
+      }
+
+      throw lastError || new Error('TradingView library was not loaded');
+    })().catch((error) => {
+      tradingViewScriptPromise = null;
+      throw error;
+    });
+
+    return tradingViewScriptPromise;
+  };
+
+  const getTerminalInstrument = (symbol) => {
+    return terminalInstruments.find((instrument) => {
+      return instrument.symbol === symbol;
+    }) || terminalInstruments[0];
+  };
+
+  const roundPrice = (value, decimals) => {
+    return Number(value.toFixed(decimals));
+  };
+
+  const getDateString = (date) => {
+    return date.toISOString().slice(0, 10);
+  };
+
+  const generateDailyCandles = (instrument) => {
+    const candles = [];
+    const today = new Date();
+    let close = instrument.basePrice;
+
+    for (let index = 90; index >= 0; index -= 1) {
+      const date = new Date(today);
+
+      date.setDate(today.getDate() - index);
+
+      const open = close;
+      const direction = Math.random() - 0.5;
+      const change = direction * instrument.step * 5;
+      const nextClose = roundPrice(open + change, instrument.decimals);
+      const high = roundPrice(Math.max(open, nextClose) + Math.random() * instrument.step * 3, instrument.decimals);
+      const low = roundPrice(Math.min(open, nextClose) - Math.random() * instrument.step * 3, instrument.decimals);
+
+      close = nextClose;
+
+      candles.push({
+        time: getDateString(date),
+        open: roundPrice(open, instrument.decimals),
+        high,
+        low,
+        close: nextClose
+      });
+    }
+
+    return candles;
+  };
+
+  const setTerminalStatus = (message) => {
+    const statusElement = document.getElementById('terminal_chart_status');
+
+    if (statusElement) {
+      statusElement.textContent = message;
+    }
+  };
+
+  const setTerminalPrice = (instrument, price) => {
+    const priceElement = document.getElementById('terminal_price_value');
+
+    if (priceElement) {
+      priceElement.textContent = `${instrument.label} ${price.toFixed(instrument.decimals)}`;
+    }
+  };
+
+  const destroyTerminalChart = () => {
+    if (!terminalRuntime) {
+      return;
+    }
+
+    if (terminalRuntime.intervalId) {
+      window.clearInterval(terminalRuntime.intervalId);
+    }
+
+    if (terminalRuntime.resizeObserver) {
+      terminalRuntime.resizeObserver.disconnect();
+    }
+
+    if (terminalRuntime.chart) {
+      terminalRuntime.chart.remove();
+    }
+
+    terminalRuntime = null;
+  };
+
+  const initTerminalPage = async () => {
+    const chartContainer = document.getElementById('terminal_chart');
+
+    if (!chartContainer) {
+      return;
+    }
+
+    destroyTerminalChart();
+    setTerminalStatus('Loading TradingView charting library...');
+
+    try {
+      const lightweightCharts = await loadTradingViewLibrary();
+      const activeInstrument = getTerminalInstrument(appStorage.getState().terminalInstrument);
+
+      if (!document.getElementById('terminal_chart')) {
+        return;
+      }
+
+      const chart = lightweightCharts.createChart(chartContainer, {
+        width: chartContainer.clientWidth,
+        height: chartContainer.clientHeight,
+        layout: {
+          background: {
+            color: '#ffffff'
+          },
+          textColor: '#374151'
+        },
+        grid: {
+          vertLines: {
+            color: '#eef2f7'
+          },
+          horzLines: {
+            color: '#eef2f7'
+          }
+        },
+        rightPriceScale: {
+          borderColor: '#dfe3ec'
+        },
+        timeScale: {
+          borderColor: '#dfe3ec'
+        }
+      });
+
+      const candleSeries = chart.addCandlestickSeries({
+        upColor: '#16a34a',
+        downColor: '#dc2626',
+        borderUpColor: '#16a34a',
+        borderDownColor: '#dc2626',
+        wickUpColor: '#16a34a',
+        wickDownColor: '#dc2626'
+      });
+
+      const candles = generateDailyCandles(activeInstrument);
+      let lastCandle = {
+        ...candles[candles.length - 1]
+      };
+
+      candleSeries.setData(candles);
+      chart.timeScale().fitContent();
+
+      setTerminalPrice(activeInstrument, lastCandle.close);
+      setTerminalStatus('Emulated daily candles and real-time price are running.');
+
+      const resizeObserver = new ResizeObserver(() => {
+        chart.applyOptions({
+          width: chartContainer.clientWidth,
+          height: chartContainer.clientHeight
+        });
+      });
+
+      resizeObserver.observe(chartContainer);
+
+      const intervalId = window.setInterval(() => {
+        const priceChange = (Math.random() - 0.5) * activeInstrument.step;
+        const nextClose = roundPrice(lastCandle.close + priceChange, activeInstrument.decimals);
+
+        lastCandle = {
+          ...lastCandle,
+          high: roundPrice(Math.max(lastCandle.high, nextClose), activeInstrument.decimals),
+          low: roundPrice(Math.min(lastCandle.low, nextClose), activeInstrument.decimals),
+          close: nextClose
+        };
+
+        candleSeries.update(lastCandle);
+        setTerminalPrice(activeInstrument, nextClose);
+      }, 1200);
+
+      terminalRuntime = {
+        chart,
+        intervalId,
+        resizeObserver
+      };
+    } catch (error) {
+      console.warn(error);
+      setTerminalStatus('TradingView library was not loaded. Put lightweight-charts.standalone.production.js into the scripts folder and reload the page.');
+    }
+  };
+
   const createTerminalPage = () => {
-    return createContentCard('Terminal', [
+    const appState = appStorage.getState();
+    const activeInstrument = getTerminalInstrument(appState.terminalInstrument);
+
+    return createElement('section', {
+      className: 'content-card terminal-card'
+    }, [
+      createElement('h2', {
+        className: 'content-title',
+        textContent: 'Terminal'
+      }),
+
       createElement('div', {
-        className: 'terminal-placeholder',
-        id: 'terminal_container'
+        className: 'terminal-toolbar'
       }, [
-        createElement('p', {
-          className: 'content-text',
-          textContent: 'TradingView chart will be loaded here when Terminal is opened.'
-        })
-      ])
+        createElement('div', {
+          className: 'terminal-control'
+        }, [
+          createElement('label', {
+            className: 'terminal-label',
+            htmlFor: 'terminal_instrument',
+            textContent: 'Instrument'
+          }),
+
+          createElement('select', {
+            className: 'terminal-select',
+            id: 'terminal_instrument',
+            name: 'terminal_instrument',
+            onChange: (event) => {
+              appStorage.setState({
+                terminalInstrument: event.currentTarget.value
+              });
+
+              initTerminalPage();
+            }
+          }, terminalInstruments.map((instrument) => {
+            return createElement('option', {
+              value: instrument.symbol,
+              selected: instrument.symbol === activeInstrument.symbol,
+              textContent: instrument.label
+            });
+          }))
+        ]),
+
+        createElement('div', {
+          className: 'terminal-price'
+        }, [
+          createElement('span', {
+            className: 'terminal-price-label',
+            textContent: 'Current price'
+          }),
+
+          createElement('strong', {
+            className: 'terminal-price-value',
+            id: 'terminal_price_value',
+            textContent: 'Loading...'
+          })
+        ])
+      ]),
+
+      createElement('div', {
+        className: 'terminal-chart',
+        id: 'terminal_chart'
+      }),
+
+      createElement('p', {
+        className: 'terminal-status',
+        id: 'terminal_chart_status',
+        textContent: 'Chart is not loaded yet.'
+      })
     ]);
   };
 
@@ -1306,6 +1745,8 @@
     const appState = appStorage.getState();
 
     if (!appState.isAuthenticated) {
+      destroyTerminalChart();
+
       appStorage.setState({
         route: routes.login
       });
@@ -1342,6 +1783,14 @@
     }
 
     rootElement.replaceChildren(...createSidebarLayout());
+
+    if (nextRoute === routes.terminal) {
+      requestAnimationFrame(() => {
+        initTerminalPage();
+      });
+    } else {
+      destroyTerminalChart();
+    }
   };
 
   window.addEventListener('hashchange', renderApp);
