@@ -14,20 +14,22 @@
           --q-screen-xl-min: 1920px;
 
           --app-min-width: 320px;
-          --header-height: 64px;
+          --header-height: 80px;
           --page-bg: #f4f6fb;
-          --header-bg: #151923;
-          --header-color: #ffffff;
+          --header-bg: #f9fafb;
+          --header-color: #374151;
           --card-bg: #ffffff;
           --card-border: #dfe3ec;
           --card-radius: 14px;
           --content-bg: #ffffff;
           --border-color: #dfe3ec;
+          --header-bottom-border-color: #e5e7eb;
 
           --sidebar-expanded-width: 100%;
           --sidebar-collapsed-width: 0px;
           --sidebar-desktop-expanded-width: min(25vw, 220px);
           --sidebar-desktop-collapsed-width: 80px;
+          --sidebar-menu-item-size: 48px;
 
           --toggle-size: 42px;
           --transition-speed: 220ms;
@@ -64,40 +66,77 @@
       }
 
       .app-header {
+          position: relative;
+          width: 100%;
           height: var(--header-height);
           max-height: 80px;
           flex: 0 0 var(--header-height);
           display: flex;
-          align-items: center;
+          align-items: stretch;
           justify-content: space-between;
-          gap: 16px;
-          padding: 0 16px;
+          gap: 12px;
+          padding: 8px 12px;
           background: var(--header-bg);
           color: var(--header-color);
+          border-bottom: 1px solid var(--header-bottom-border-color);
+      }
+
+      .app-brand {
+          min-width: 0;
+          flex: 1 1 auto;
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          justify-content: center;
+          gap: 4px;
+      }
+
+      .app-logo {
+          width: 140px;
+          height: 14px;
+          flex: 0 0 auto;
+          display: block;
       }
 
       .app-title {
           margin: 0;
           font-size: 18px;
           font-weight: 700;
+          white-space: nowrap;
+      }
+
+      .app-brand h1 {
+          display: none;
       }
 
       .app-header-actions {
+          flex: 0 0 auto;
           display: flex;
           align-items: center;
-          gap: 10px;
+          justify-content: flex-end;
+          gap: 8px;
       }
 
       .app-header-link {
           border: 0;
           background: transparent;
-          color: #ffffff;
-          font-size: 14px;
+          color: var(--header-color);
+          font-size: 13px;
           cursor: pointer;
       }
 
       .app-header-link:hover {
           text-decoration: underline;
+      }
+
+      .app-client-name {
+          position: absolute;
+          left: 12px;
+          bottom: 8px;
+          color: var(--header-color);
+          font-size: 12px;
+          font-weight: 600;
+          white-space: nowrap;
       }
 
       .app-main {
@@ -210,13 +249,6 @@
           text-align: center;
       }
 
-      .app-client-name {
-          color: #ffffff;
-          font-size: 14px;
-          font-weight: 600;
-          white-space: nowrap;
-      }
-
       .sidebar-state {
           position: absolute;
           width: 1px;
@@ -226,6 +258,7 @@
       }
 
       .mobile-sidebar-toggle {
+          box-shadow: 0 -2px 24px 0 rgba(24, 36, 51, 0.1);
           width: var(--toggle-size);
           height: var(--toggle-size);
           display: flex;
@@ -270,13 +303,76 @@
           min-height: 100%;
           padding: 16px;
           opacity: 0;
-          transition: opacity var(--transition-speed) ease;
+          transition:
+                  width var(--transition-speed) ease,
+                  max-width var(--transition-speed) ease,
+                  opacity var(--transition-speed) ease;
       }
 
       .sidebar-heading {
           margin: 0 0 16px;
           font-size: 16px;
           font-weight: 700;
+          transition:
+                  opacity var(--transition-speed) ease,
+                  height var(--transition-speed) ease,
+                  margin var(--transition-speed) ease;
+      }
+
+      .sidebar-menu {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+      }
+
+      .sidebar-menu-button {
+          width: 100%;
+          min-width: 188px;
+          height: 48px;
+          display: flex;
+          align-items: center;
+          gap: 14px;
+          padding: 0 14px;
+          border: 0;
+          border-radius: 12px;
+          background: transparent;
+          color: #c8d0e0;
+          font-size: 15px;
+          font-weight: 600;
+          text-align: left;
+          cursor: pointer;
+          overflow: hidden;
+          transition:
+                  width var(--transition-speed) ease,
+                  min-width var(--transition-speed) ease,
+                  max-width var(--transition-speed) ease,
+                  padding var(--transition-speed) ease,
+                  background var(--transition-speed) ease,
+                  color var(--transition-speed) ease;
+      }
+
+      .sidebar-menu-button:hover {
+          background: rgba(255, 255, 255, 0.08);
+          color: #ffffff;
+      }
+
+      .sidebar-menu-button-active {
+          background: rgba(255, 255, 255, 0.14);
+          color: #ffffff;
+      }
+
+      .sidebar-menu-icon {
+          width: 22px;
+          height: 22px;
+          flex: 0 0 22px;
+          display: block;
+      }
+
+      .sidebar-menu-label {
+          white-space: nowrap;
+          transition:
+                  width var(--transition-speed) ease,
+                  opacity var(--transition-speed) ease;
       }
 
       .sidebar-placeholder {
@@ -295,6 +391,12 @@
           background: var(--content-bg);
       }
 
+      .page-grid {
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+      }
+
       .content-card {
           min-height: 240px;
           padding: 16px;
@@ -304,7 +406,7 @@
       }
 
       .content-title {
-          margin: 0 0 8px;
+          margin: 0 0 16px;
           color: #151923;
           font-size: 20px;
       }
@@ -313,6 +415,81 @@
           margin: 0;
           color: #667085;
           line-height: 1.5;
+      }
+
+      .info-list {
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+      }
+
+      .info-row {
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
+          padding: 12px;
+          border: 1px solid var(--border-color);
+          border-radius: 10px;
+          background: #f8fafc;
+      }
+
+      .info-label {
+          color: #667085;
+          font-size: 13px;
+      }
+
+      .info-value {
+          color: #151923;
+          font-size: 15px;
+          font-weight: 700;
+      }
+
+      .accounts-list {
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+      }
+
+      .account-card {
+          display: flex;
+          justify-content: space-between;
+          gap: 16px;
+          padding: 14px;
+          border: 1px solid var(--border-color);
+          border-radius: 12px;
+          background: #f8fafc;
+      }
+
+      .account-name {
+          margin: 0 0 4px;
+          color: #151923;
+          font-size: 15px;
+          font-weight: 700;
+      }
+
+      .account-meta {
+          margin: 0;
+          color: #667085;
+          font-size: 13px;
+      }
+
+      .account-balance {
+          color: #151923;
+          font-size: 15px;
+          font-weight: 700;
+          white-space: nowrap;
+      }
+
+      .terminal-placeholder {
+          min-height: 360px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border: 1px dashed #98a2b3;
+          border-radius: 12px;
+          background: #f8fafc;
+          color: #667085;
+          text-align: center;
       }
 
       .sidebar-state:checked ~ .app-shell .sidebar {
@@ -330,7 +507,37 @@
           }
 
           .app-header {
+              align-items: center;
               padding: 0 24px;
+          }
+
+          .app-brand {
+              flex-direction: row;
+              align-items: center;
+              justify-content: flex-start;
+              gap: 10px;
+          }
+
+          .app-brand h1 {
+              display: block;
+          }
+
+          .app-logo {
+              width: 180px;
+              height: 18px;
+          }
+
+          .app-header-actions {
+              gap: 10px;
+          }
+
+          .app-header-link {
+              font-size: 14px;
+          }
+
+          .app-client-name {
+              position: static;
+              font-size: 14px;
           }
 
           .app-main {
@@ -369,7 +576,9 @@
               cursor: pointer;
               user-select: none;
               z-index: 4;
-              transition: left var(--transition-speed) ease;
+              transition:
+                      left var(--transition-speed) ease,
+                      transform var(--transition-speed) ease;
           }
 
           .sidebar {
@@ -395,6 +604,45 @@
 
           .sidebar-state:checked ~ .app-shell .desktop-sidebar-toggle {
               left: calc(var(--sidebar-desktop-expanded-width) - (var(--toggle-size) / 2));
+          }
+
+          .sidebar-state:not(:checked) ~ .app-shell .desktop-sidebar-toggle {
+              transform: rotate(180deg);
+          }
+
+          .sidebar-state:not(:checked) ~ .app-shell .sidebar-inner {
+              width: var(--sidebar-desktop-collapsed-width);
+              max-width: var(--sidebar-desktop-collapsed-width);
+              padding: 16px;
+          }
+
+          .sidebar-state:not(:checked) ~ .app-shell .sidebar-heading {
+              height: 0;
+              margin: 0;
+              opacity: 0;
+              overflow: hidden;
+          }
+
+          .sidebar-state:not(:checked) ~ .app-shell .sidebar-menu {
+              align-items: center;
+              gap: 16px;
+          }
+
+          .sidebar-state:not(:checked) ~ .app-shell .sidebar-menu-button {
+              width: var(--sidebar-menu-item-size);
+              min-width: var(--sidebar-menu-item-size);
+              max-width: var(--sidebar-menu-item-size);
+              height: var(--sidebar-menu-item-size);
+              justify-content: center;
+              gap: 0;
+              padding: 0;
+              border-radius: 16px;
+          }
+
+          .sidebar-state:not(:checked) ~ .app-shell .sidebar-menu-label {
+              width: 0;
+              opacity: 0;
+              overflow: hidden;
           }
       }
 
@@ -487,7 +735,37 @@
 
   const routes = {
     login: 'login',
-    dashboard: 'dashboard'
+    profile: 'profile',
+    accounts: 'accounts',
+    terminal: 'terminal'
+  };
+
+  const protectedRoutes = [
+    routes.profile,
+    routes.accounts,
+    routes.terminal
+  ];
+
+  const menuItems = [
+    {
+      route: routes.profile,
+      label: 'Profile',
+      icon: 'images/profile-icon.svg'
+    },
+    {
+      route: routes.accounts,
+      label: 'Accounts',
+      icon: 'images/accounts-icon.svg'
+    },
+    {
+      route: routes.terminal,
+      label: 'Terminal',
+      icon: 'images/trade-icon.svg'
+    }
+  ];
+
+  const isProtectedRoute = (route) => {
+    return protectedRoutes.includes(route);
   };
 
   const loginCredentials = {
@@ -503,7 +781,7 @@
     }
 
     appStorage.setState({
-      route: routes.dashboard,
+      route: routes.terminal,
       isAuthenticated: true,
       clientName: login
     });
@@ -620,16 +898,30 @@
     appendChildren(element, children);
 
     return element;
-  }
+  };
+
+  const createAppBrand = () => {
+    return createElement('div', {
+      className: 'app-brand'
+    }, [
+      createElement('img', {
+        className: 'app-logo',
+        src: 'images/oneroyal-logo.svg',
+        alt: 'Client Portal logo'
+      }),
+
+      createElement('h1', {
+        className: 'app-title',
+        textContent: 'Client Portal'
+      })
+    ]);
+  };
 
   const createAppHeader = () => {
     return createElement('header', {
       className: 'app-header'
     }, [
-      createElement('h1', {
-        className: 'app-title',
-        textContent: 'Client Portal'
-      })
+      createAppBrand()
     ]);
   };
 
@@ -659,7 +951,7 @@
               return;
             }
 
-            navigateTo(routes.dashboard);
+            navigateTo(routes.terminal);
           }
         }, [
           createElement('h2', {
@@ -742,10 +1034,7 @@
     return createElement('header', {
       className: 'app-header'
     }, [
-      createElement('h1', {
-        className: 'app-title',
-        textContent: 'Client Portal'
-      }),
+      createAppBrand(),
 
       createElement('div', {
         className: 'app-header-actions'
@@ -774,8 +1063,183 @@
     ]);
   };
 
+  const createSidebarMenu = (activeRoute) => {
+    return createElement('nav', {
+      className: 'sidebar-menu',
+      'aria-label': 'Main menu'
+    }, menuItems.map((item) => {
+      const isActive = item.route === activeRoute;
+
+      return createElement('button', {
+        className: isActive
+          ? 'sidebar-menu-button sidebar-menu-button-active'
+          : 'sidebar-menu-button',
+        type: 'button',
+        onClick: () => {
+          navigateTo(item.route);
+        }
+      }, [
+        createElement('img', {
+          className: 'sidebar-menu-icon',
+          src: item.icon,
+          alt: ''
+        }),
+
+        createElement('span', {
+          className: 'sidebar-menu-label',
+          textContent: item.label
+        })
+      ]);
+    }));
+  };
+
+  const createContentCard = (title, children) => {
+    return createElement('section', {
+      className: 'content-card'
+    }, [
+      createElement('h2', {
+        className: 'content-title',
+        textContent: title
+      }),
+
+      ...children
+    ]);
+  };
+
+  const createProfilePage = () => {
+    const appState = appStorage.getState();
+    const clientName = appState.clientName || 'Client';
+
+    return createContentCard('Profile', [
+      createElement('div', {
+        className: 'info-list'
+      }, [
+        createElement('div', {
+          className: 'info-row'
+        }, [
+          createElement('span', {
+            className: 'info-label',
+            textContent: 'Client Name'
+          }),
+
+          createElement('span', {
+            className: 'info-value',
+            textContent: clientName
+          })
+        ]),
+
+        createElement('div', {
+          className: 'info-row'
+        }, [
+          createElement('span', {
+            className: 'info-label',
+            textContent: 'Status'
+          }),
+
+          createElement('span', {
+            className: 'info-value',
+            textContent: 'Verified'
+          })
+        ]),
+
+        createElement('div', {
+          className: 'info-row'
+        }, [
+          createElement('span', {
+            className: 'info-label',
+            textContent: 'Account Type'
+          }),
+
+          createElement('span', {
+            className: 'info-value',
+            textContent: 'Demo Client'
+          })
+        ])
+      ])
+    ]);
+  };
+
+  const createAccountsPage = () => {
+    return createContentCard('Accounts', [
+      createElement('div', {
+        className: 'accounts-list'
+      }, [
+        createElement('div', {
+          className: 'account-card'
+        }, [
+          createElement('div', {}, [
+            createElement('p', {
+              className: 'account-name',
+              textContent: 'Trading Account'
+            }),
+
+            createElement('p', {
+              className: 'account-meta',
+              textContent: 'USD - Demo'
+            })
+          ]),
+
+          createElement('strong', {
+            className: 'account-balance',
+            textContent: '$10,000.00'
+          })
+        ]),
+
+        createElement('div', {
+          className: 'account-card'
+        }, [
+          createElement('div', {}, [
+            createElement('p', {
+              className: 'account-name',
+              textContent: 'Investment Account'
+            }),
+
+            createElement('p', {
+              className: 'account-meta',
+              textContent: 'EUR - Demo'
+            })
+          ]),
+
+          createElement('strong', {
+            className: 'account-balance',
+            textContent: '€5,250.00'
+          })
+        ])
+      ])
+    ]);
+  };
+
+  const createTerminalPage = () => {
+    return createContentCard('Terminal', [
+      createElement('div', {
+        className: 'terminal-placeholder',
+        id: 'terminal_container'
+      }, [
+        createElement('p', {
+          className: 'content-text',
+          textContent: 'TradingView chart will be loaded here when Terminal is opened.'
+        })
+      ])
+    ]);
+  };
+
+  const createPageContent = (route) => {
+    if (route === routes.accounts) {
+      return createAccountsPage();
+    }
+
+    if (route === routes.terminal) {
+      return createTerminalPage();
+    }
+
+    return createProfilePage();
+  };
+
   const createSidebarLayout = () => {
     const appState = appStorage.getState();
+    const activeRoute = isProtectedRoute(appState.route)
+      ? appState.route
+      : routes.profile;
 
     return [
       createElement('input', {
@@ -803,13 +1267,10 @@
           }, [
             createElement('h2', {
               className: 'sidebar-heading',
-              textContent: 'Sidebar'
+              textContent: 'Menu'
             }),
 
-            createElement('p', {
-              className: 'sidebar-placeholder',
-              textContent: 'kjhfgk ufkhgf kgfkfgk gfkghfkhgf ugfkfg kgfkgf fghfkhg  kfghgf kfgkhgf'
-            })
+            createSidebarMenu(activeRoute)
           ])
         ]),
 
@@ -823,18 +1284,10 @@
         createElement('main', {
           className: 'content'
         }, [
-          createElement('section', {
-            className: 'content-card'
+          createElement('div', {
+            className: 'page-grid'
           }, [
-            createElement('h2', {
-              className: 'content-title',
-              textContent: 'Content area'
-            }),
-
-            createElement('p', {
-              className: 'content-text',
-              textContent: 'sfgs fdgasfg sf dg sdf gd sfg sdf gs dfg sdf gsd fgsdfg sdf gs'
-            })
+            createPageContent(activeRoute)
           ])
         ])
       ])
@@ -860,17 +1313,26 @@
     }
 
     if (route === routes.login) {
-      navigateTo(
-        appState.route && appState.route !== routes.login
-          ? appState.route
-          : routes.dashboard
-      );
+      const savedRoute = isProtectedRoute(appState.route)
+        ? appState.route
+        : routes.profile;
+
+      navigateTo(savedRoute);
       return;
     }
 
+    const nextRoute = isProtectedRoute(route)
+      ? route
+      : routes.profile;
+
     appStorage.setState({
-      route
+      route: nextRoute
     });
+
+    if (window.location.hash !== `#${nextRoute}`) {
+      window.location.hash = nextRoute;
+      return;
+    }
 
     rootElement.replaceChildren(...createSidebarLayout());
   };
