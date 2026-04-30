@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login Layout Template</title>
+
+  <style>
+      :root {
+          --q-screen-xs-min: 0px;
+          --q-screen-sm-min: 600px;
+          --q-screen-md-min: 1024px;
+          --q-screen-lg-min: 1440px;
+          --q-screen-xl-min: 1920px;
+
+          --app-min-width: 320px;
+          --header-height: 64px;
+          --page-bg: #f4f6fb;
+          --header-bg: #151923;
+          --header-color: #ffffff;
+          --card-bg: #ffffff;
+          --card-border: #dfe3ec;
+          --card-radius: 14px;
+      }
+
+      * {
+          box-sizing: border-box;
+      }
+
+      html,
+      body {
+          width: 100%;
+          min-width: var(--app-min-width);
+          min-height: 100%;
+          margin: 0;
+          font-family: Arial, sans-serif;
+          background: var(--page-bg);
+      }
+
+      body {
+          min-height: 100vh;
+      }
+
+      #root {
+          width: 100%;
+          min-height: 100vh;
+          display: flex;
+          flex-direction: column;
+      }
+
+      .app-header {
+          height: var(--header-height);
+          max-height: 80px;
+          flex: 0 0 var(--header-height);
+          display: flex;
+          align-items: center;
+          padding: 0 16px;
+          background: var(--header-bg);
+          color: var(--header-color);
+      }
+
+      .app-title {
+          margin: 0;
+          font-size: 18px;
+          font-weight: 700;
+      }
+
+      .app-main {
+          min-height: calc(100vh - var(--header-height));
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 16px;
+          overflow: auto;
+      }
+
+      .login-card {
+          width: 100%;
+          max-width: 380px;
+          min-height: 260px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 24px;
+          border: 1px solid var(--card-border);
+          border-radius: var(--card-radius);
+          background: var(--card-bg);
+      }
+
+      .login-placeholder {
+          margin: 0;
+          color: #667085;
+          font-size: 16px;
+          text-align: center;
+      }
+
+      @media (min-width: 600px) {
+          :root {
+              --header-height: 68px;
+          }
+
+          .app-header {
+              padding: 0 24px;
+          }
+
+          .app-main {
+              padding: 24px;
+          }
+      }
+
+      @media (min-width: 1024px) {
+          .login-card {
+              max-width: 420px;
+          }
+      }
+
+      @media (min-width: 1440px) {
+          .login-card {
+              max-width: 460px;
+          }
+      }
+
+      @media (min-width: 1920px) {
+          .login-card {
+              max-width: 500px;
+          }
+      }
+  </style>
+</head>
+
+<body>
+<div id="root">
+  <header class="app-header">
+    <h1 class="app-title">Client Portal</h1>
+  </header>
+
+  <main class="app-main">
+    <section class="login-card">
+      <p class="login-placeholder">Login form</p>
+    </section>
+  </main>
+</div>
+</body>
+</html>
