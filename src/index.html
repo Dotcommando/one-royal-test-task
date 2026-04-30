@@ -34,6 +34,8 @@
 
           --sidebar-bg: #202637;
           --sidebar-color: #ffffff;
+
+          --text-error: #c0392b;
       }
 
       * {
@@ -197,6 +199,22 @@
 
       .login-submit:active {
           transform: translateY(1px);
+      }
+
+      .login-error {
+          min-height: 18px;
+          margin: -4px 0 0;
+          color: var(--test-error);
+          font-size: 13px;
+          line-height: 1.4;
+          text-align: center;
+      }
+
+      .app-client-name {
+          color: #ffffff;
+          font-size: 14px;
+          font-weight: 600;
+          white-space: nowrap;
       }
 
       .sidebar-state {
@@ -413,7 +431,9 @@
 
     const defaultState = {
       route: 'login',
-      sidebarExpanded: false
+      sidebarExpanded: false,
+      isAuthenticated: false,
+      clientName: null
     };
 
     const parseJson = (rawValue) => {
@@ -468,6 +488,43 @@
   const routes = {
     login: 'login',
     dashboard: 'dashboard'
+  };
+
+  const loginCredentials = {
+    login: 'testLogin',
+    password: 'testPassword'
+  };
+
+  const loginUser = (login, password) => {
+    const isValidUser = login === loginCredentials.login && password === loginCredentials.password;
+
+    if (!isValidUser) {
+      return false;
+    }
+
+    appStorage.setState({
+      route: routes.dashboard,
+      isAuthenticated: true,
+      clientName: login
+    });
+
+    return true;
+  };
+
+  const logoutUser = () => {
+    appStorage.setState({
+      route: routes.login,
+      isAuthenticated: false,
+      clientName: null,
+      sidebarExpanded: false
+    });
+
+    if (window.location.hash !== `#${routes.login}`) {
+      window.location.hash = routes.login;
+      return;
+    }
+
+    renderApp();
   };
 
   const getRouteFromHash = () => {
@@ -587,6 +644,21 @@
           className: 'login-form',
           onSubmit: (event) => {
             event.preventDefault();
+
+            const formData = new FormData(event.currentTarget);
+            const login = String(formData.get('login') || '').trim();
+            const password = String(formData.get('password') || '');
+            const errorElement = event.currentTarget.querySelector('#login_error');
+            const isLoggedIn = loginUser(login, password);
+
+            if (!isLoggedIn) {
+              if (errorElement) {
+                errorElement.textContent = 'Invalid login or password';
+              }
+
+              return;
+            }
+
             navigateTo(routes.dashboard);
           }
         }, [
@@ -597,7 +669,7 @@
 
           createElement('p', {
             className: 'login-form-subtitle',
-            textContent: 'Enter your credentials to continue.'
+            textContent: 'Use testLogin and testPassword to continue.'
           }),
 
           createElement('div', {
@@ -615,7 +687,8 @@
               name: 'login',
               type: 'text',
               autocomplete: 'username',
-              placeholder: 'Enter login'
+              placeholder: 'Enter login',
+              required: true
             })
           ]),
 
@@ -634,9 +707,16 @@
               name: 'password',
               type: 'password',
               autocomplete: 'current-password',
-              placeholder: 'Enter password'
+              placeholder: 'Enter password',
+              required: true
             })
           ]),
+
+          createElement('p', {
+            className: 'login-error',
+            id: 'login_error',
+            role: 'alert'
+          }),
 
           createElement('button', {
             className: 'login-submit',
@@ -656,6 +736,9 @@
   };
 
   const createSidebarHeader = () => {
+    const appState = appStorage.getState();
+    const clientName = appState.clientName || 'Client';
+
     return createElement('header', {
       className: 'app-header'
     }, [
@@ -667,12 +750,17 @@
       createElement('div', {
         className: 'app-header-actions'
       }, [
+        createElement('span', {
+          className: 'app-client-name',
+          textContent: `Hello, ${clientName}!`
+        }),
+
         createElement('button', {
           className: 'app-header-link',
           type: 'button',
           textContent: 'Logout',
           onClick: () => {
-            navigateTo(routes.login);
+            logoutUser();
           }
         }),
 
@@ -755,17 +843,36 @@
 
   const renderApp = () => {
     const route = getCurrentRoute();
+    const appState = appStorage.getState();
+
+    if (!appState.isAuthenticated) {
+      appStorage.setState({
+        route: routes.login
+      });
+
+      if (window.location.hash !== `#${routes.login}`) {
+        window.location.hash = routes.login;
+        return;
+      }
+
+      rootElement.replaceChildren(...renderLoginPage());
+      return;
+    }
+
+    if (route === routes.login) {
+      navigateTo(
+        appState.route && appState.route !== routes.login
+          ? appState.route
+          : routes.dashboard
+      );
+      return;
+    }
 
     appStorage.setState({
       route
     });
 
-    if (route === routes.dashboard) {
-      rootElement.replaceChildren(...createSidebarLayout());
-      return;
-    }
-
-    rootElement.replaceChildren(...renderLoginPage());
+    rootElement.replaceChildren(...createSidebarLayout());
   };
 
   window.addEventListener('hashchange', renderApp);
